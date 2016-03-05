@@ -1,0 +1,6 @@
+venv/
+app/config.py
+**/__pycache__/
+*.pyc
+*.swp
+**/.webassets-cache/
