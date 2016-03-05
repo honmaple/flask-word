@@ -1,0 +1,122 @@
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>HonMaple的留言版</title>
+        {% assets "home_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
+        {% assets "home_css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}" />
+        {% endassets %}
+        <script type=text/javascript>
+$(document).ready(function(){
+    $("#showerror").hide();
+    $('button#hide').click(function(){
+        $("#showerror").hide();
+    });
+    var csrftoken = "{{ csrf_token() }}"
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                }
+            }
+        });
+    $('button#ajax').click(function() {
+        $.ajax ({
+            type : "POST",
+            url : "{{ url_for('index') }}",
+            data:JSON.stringify({
+                content: $('#content').val(),
+                email: $('#email').val(),
+                name: $('#name').val()
+            }),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result) {
+                if (result.judge == true)
+                {
+                    var template = "<div class=\"panel panel-info\"><div class=\"panel-heading\">\
+                                    " + $("#name").val() + "于" + Date()  + "留言:" + "</div><div class=\"panel-body\">\
+                                    " + $("#content").val() + "</div></div>";
+                    $("#showerror").show();
+                    $("#error").text(result.error);
+                    $("#showTemplate").append(template);
+                    $("#content").val("");
+                    $("#name").val("");
+                    $("#email").val("")
+                }
+                else 
+                {
+                    $("#showerror").show();
+                    $("#error").text(result.error);
+                }
+            }
+        });
+    });
+});
+        </script>
+        <style type="text/css">
+            html,body{height:100%}
+            .container {width:100%;}
+            .footer {margin-top:-30px;height:30px;}
+            .wrap{min-height:100%}
+            .main{padding-bottom:30px;overflow:hidden;}
+            ul {margin:0;padding:0;}
+            li {
+                list-style:none;
+            }
+            .category {
+                padding:15px;background:#fff;
+                border: 1px solid #ddd;border-radius: 3px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <div class="main">
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-8 category">
+                    <div class="alert alert-info" id="showerror" style="padding:8px;">
+                        <button type="button" class="close" id="hide">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <ul>
+                            <li id="error"></li>
+                        </ul>
+                    </div>
+                    <div class="form-horizontal">
+                        {{ form.content.label }}
+                        {{ form.content(class="form-control",placeholder="写下你的留言",rows=6,style="width:100%;") }}
+                        {{ form.email.label }}
+                        {{ form.email(class="form-control",placeholder="email",style="width:80%;") }}
+                        {{ form.name.label }}
+                        {{ form.name(class="form-control",placeholder="昵称",style="width:80%;") }}
+                        <button type="button" class="btn btn-primary" id="ajax">留言</button> 
+                    </div>
+                    <div id="showTemplate">
+                    </div>
+                    {% for time,email in all_words.items() | sort(reverse=True) %}
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            {% set content = time | get_word(email) %}
+                            {{ content[1] }}
+                        </div>
+                        <div class="panel-body">
+                            {{ content[0] }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="col-md-2">
+                </div>
+            </div>
+        </div>
+        <div class="footer" style="text-align:center">
+            Copyright © 2016 honmaple.cn. All rights reserved.
+        </div>
+    </body>
+</html>
+
