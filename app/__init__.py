@@ -10,8 +10,13 @@
 from flask import Flask
 from flask_assets import Environment, Bundle
 from redis import StrictRedis
-from app import config
+from config import load_config
 
+def create_app():
+    app = Flask(__name__, static_folder='static')
+    config = load_config()
+    app.config.from_object(config)
+    return app
 
 def register(app):
     register_assets(app)
@@ -24,12 +29,14 @@ def register_form(app):
     csrf.init_app(app)
 
 def register_blueprint(app):
-    #  from .index import site
-    #  app.register_blueprint(site,url_prefix='')
+    from .index import site
+    app.register_blueprint(site,url_prefix='')
     from .vote import site
     app.register_blueprint(site,url_prefix='/vote')
     from .word import site
     app.register_blueprint(site,url_prefix='/word')
+    from .count import site
+    app.register_blueprint(site,url_prefix='/count')
 
 def register_assets(app):
     bundles = {
@@ -49,8 +56,7 @@ def register_assets(app):
     assets = Environment(app)
     assets.register(bundles)
 
-app = Flask(__name__)
-app.config.from_object(config)
+app = create_app()
 config = app.config
 redis_data = StrictRedis(db=config['REDIS_DB'],
                             password=config['REDIS_PASSWORD'])

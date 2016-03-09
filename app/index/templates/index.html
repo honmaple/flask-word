@@ -1,0 +1,46 @@
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>HonMaple的flask练习</title>
+        {% assets "home_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
+        {% assets "home_css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}" />
+        {% endassets %}
+        <style type="text/css">
+            html,body{height:100%}
+            .container {width:100%;}
+            .footer {margin-top:-30px;height:30px;}
+            .wrap{min-height:100%}
+            .main{padding-bottom:30px;overflow:hidden;}
+            ul {margin:0;padding:0;}
+            li {
+                list-style:none;
+            }
+            .category {
+                padding:15px;background:#fff;
+                border: 1px solid #ddd;border-radius: 3px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <div class="main">
+                <div class="col-md-offset-2 col-md-8">
+                    <ul class="list-group">
+                        <li class="list-group-item"> <a href="{{ url_for('word.index') }}">留言簿</a></li>
+                        <li class="list-group-item"> <a href="{{ url_for('vote.index') }}">投票</a></li>
+                        <li class="list-group-item"> <a href="{{ url_for('count.index') }}">cookies计数</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer" style="text-align:center">
+            Copyright © 2016 honmaple.cn. All rights reserved.
+        </div>
+    </body>
+</html>
+

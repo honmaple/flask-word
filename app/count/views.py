@@ -8,11 +8,11 @@
 #!/usr/bin/env python
 # -*- coding=UTF-8 -*-
 # from app import app
-from flask import Flask,request,make_response
-app = Flask(__name__)
+from . import site
+from flask import request,make_response
 
-@app.route('/')
-def hello_world():
+@site.route('')
+def index():
     if 'count' in request.cookies:
         count = int(request.cookies['count']) + 1
     else:
@@ -20,6 +20,4 @@ def hello_world():
     response = make_response(str(count))
     response.set_cookie('count',value=str(count),max_age=1800)
     return response
-if __name__ == '__main__':
-    app.run()
 

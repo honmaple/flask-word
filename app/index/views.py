@@ -1,17 +1,15 @@
 #*************************************************************************
 #   Copyright © 2015 JiangLin. All rights reserved.
-#   File Name: run.py
+#   File Name: views.py
 #   Author:JiangLin
 #   Mail:xiyang0807@gmail.com
-#   Created Time: 2015-12-20 18:13:59
+#   Created Time: 2015-12-20 18:17:57
 #*************************************************************************
 #!/usr/bin/env python
 # -*- coding=UTF-8 -*-
-from app import app
-from werkzeug.contrib.fixers import ProxyFix
+from . import site
+from flask import render_template,request,jsonify
 
-app.wsgi_app = ProxyFix(app.wsgi_app)
-if __name__ == '__main__':
-    app.run()
-    #  print(app.url_map)
-
+@site.route('/')
+def index():
+    return render_template('index.html')

@@ -1,21 +1,23 @@
-## 留言簿
-数据存储使用redis  
-表单提交使用ajax  
-### use
-    pip install -r requirements.txt
-    python run.py
-    # http://127.0.0.1:5000/word
+## This is My flask Practice
+## message board
 ### Demo
-You can have a look [ here ](http://honmaple.cn)
+You can have a look [ here ](http://honmaple.cn/word)
 
-## 投票功能实现
-    # http://127.0.0.1:5000/vote
+## vote
+### Demo
+You can have a look [ here ](http://honmaple.cn/vote)
 
-## app/config.py
+## cookies to count
+### Demo
+You can have a look [ here ](http://honmaple.cn/count)
+
+## config/config.py
 
     DEBUG = True
     SECRET_KEY
     REDIS_PASSWORD
     REDIS_DB
-## flask简单cookie操作
-    python count.py
+
+### use
+    pip install -r requirements.txt
+    python run.py

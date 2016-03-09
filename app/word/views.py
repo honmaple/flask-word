@@ -13,8 +13,7 @@ from flask import render_template,request,jsonify
 from .form import WordsForm
 from time import time
 
-@site.route('')
-@site.route('/index',methods=['GET','POST'])
+@site.route('',methods=['GET','POST'])
 def index():
     form = WordsForm()
     '''得到所有用户'''
