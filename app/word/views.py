@@ -7,13 +7,14 @@
 #*************************************************************************
 #!/usr/bin/env python
 # -*- coding=UTF-8 -*-
-from app import app,redis_data
+from app import redis_data
+from . import site
 from flask import render_template,request,jsonify
 from .form import WordsForm
 from time import time
 
-@app.route('/')
-@app.route('/index',methods=['GET','POST'])
+@site.route('')
+@site.route('/index',methods=['GET','POST'])
 def index():
     form = WordsForm()
     '''得到所有用户'''
@@ -51,6 +52,6 @@ def index():
             return jsonify(judge=False,error=error)
         else:
             pass
-        return render_template('index.html',
+        return render_template('word/index.html',
                                 form = form,
                                 all_words = all_words)

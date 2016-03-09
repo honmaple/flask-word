@@ -16,21 +16,20 @@ from app import config
 def register(app):
     register_assets(app)
     register_form(app)
-    register_jinja2(app)
-
-def register_jinja2(app):
-    def get_word(time,name):
-        time = str(time,'utf-8')
-        word = redis_data.hget(name,time)
-        from datetime import datetime
-        time = datetime.utcfromtimestamp(int(time))
-        return str(word,'utf-8'),name + ' 于 ' + str(time) + ' 留言:'
-    app.jinja_env.filters['get_word'] = get_word
+    register_blueprint(app)
 
 def register_form(app):
     from flask_wtf.csrf import CsrfProtect
     csrf = CsrfProtect()
     csrf.init_app(app)
+
+def register_blueprint(app):
+    #  from .index import site
+    #  app.register_blueprint(site,url_prefix='')
+    from .vote import site
+    app.register_blueprint(site,url_prefix='/vote')
+    from .word import site
+    app.register_blueprint(site,url_prefix='/word')
 
 def register_assets(app):
     bundles = {
@@ -57,4 +56,4 @@ redis_data = StrictRedis(db=config['REDIS_DB'],
                             password=config['REDIS_PASSWORD'])
 register(app)
 
-from app import views
+

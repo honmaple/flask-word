@@ -1,0 +1,123 @@
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{{ vote['title'] }}</title>
+        {% assets "home_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
+        {% assets "home_css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}" />
+        {% endassets %}
+        <script type=text/javascript>
+$(document).ready(function(){
+    $("#showerror").hide();
+    $('button#hide').click(function(){
+        $("#showerror").hide();
+    });
+    var csrftoken = "{{ csrf_token() }}"
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                }
+            }
+        });
+    $('button#ajax').click(function() {
+        $.ajax ({
+            type : "POST",
+            url : "{{ url_for('vote.vote') }}",
+            data:JSON.stringify({
+                vote: $('input[name="vote"]:checked').val()
+            }),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result) {
+                if (result.judge==true){
+                    window.location='{{ url_for('vote.index') }}';
+                }
+                else
+                {
+                    $("#showerror").show();
+                    $("#error").text(result.error);
+                }
+            }
+        });
+    });
+});
+        </script>
+        <style type="text/css">
+            html,body{height:100%}
+            .container {width:100%;}
+            .footer {margin-top:-30px;height:30px;}
+            .wrap{min-height:100%}
+            .main{padding-bottom:30px;overflow:hidden;}
+            ul {margin:0;padding:0;}
+            li {
+                list-style:none;
+            }
+            .category {
+                padding:15px;background:#fff;
+                border: 1px solid #ddd;border-radius: 3px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <div class="main container-fluid">
+                <div class="row">
+                    <div class="col-md-offset-2 col-md-8 panel panel-default" style="padding:0;">
+                        <div class="panel-heading" style="font-size:16px"> <b>{{ vote['title'] }}</b></div>
+                        <div class="panel-body">
+                            {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                            <div class="alert alert-info" style="padding:8px">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <ul>
+                                    {% for message in messages %}
+                                    <li>{{ message }} </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+                            {% endwith %}
+                            <div class="alert alert-info" id="showerror" style="padding:8px;">
+                                <button type="button" class="close" id="hide">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <ul>
+                                    <li id="error"></li>
+                                </ul>
+                            </div>
+                            <section>
+                                {{ form.vote() }}
+                                <button class="btn btn-sm  btn-info" id="ajax" type="button">投票</button>
+                            </section>
+                        </div>
+                        <div class="panel-body">
+                            <section>
+                                <div style="font-size:16px"> <b>投票结果:</b></div>
+                                {% for e in vote['list'] %}
+                                    <b>{{ e[1] }}:</b>
+                                <div class="progress">
+                                    {% set counts = e[1] | vote_count | int %}
+                                    {% set count = counts / vote['total'] * 100 %}
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ count }}%;">
+                                        {{ counts }}票
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer" style="text-align:center">
+            Copyright © 2016 honmaple. All rights reserved.
+        </div>
+    </body>
+</html>
+
