@@ -1,0 +1,12 @@
+{% extends 'maple/base.html' %}
+{% block main %}
+<div class="col-md-offset-2 col-md-8">
+    <ul class="list-group">
+        <li class="list-group-item"> <a href="{{ url_for('word.index') }}">留言簿</a></li>
+        <li class="list-group-item"> <a href="{{ url_for('vote.index') }}">投票</a></li>
+        <li class="list-group-item"> <a href="{{ url_for('count.index') }}">cookies计数</a></li>
+        <li class="list-group-item"> <a href="{{ url_for('paginate.index') }}">flask分页</a></li>
+        <li class="list-group-item"> <a href="{{ url_for('chat.index') }}">Chat</a></li>
+    </ul>
+</div>
+{% endblock %}

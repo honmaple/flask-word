@@ -1,0 +1,21 @@
+{% extends 'maple/base.html' %}
+{% block main %}
+<div class="row">
+    <div class="col-md-offset-2 col-md-8" style="border:1px solid #eee;">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            {{ form.username.label }}: {{ form.username(class="form-control") }} {% for error in form.username.errors %}
+            <span class="text-danger">
+                {{ error }}
+            </span>
+            {% endfor %}<br>
+            {{ form.room.label }}: {{ form.room(class="form-control") }} {% for error in form.room.errors %}
+            <span class="text-danger">
+                {{ error }}
+            </span>
+            {% endfor %}<br>
+            {{ form.submit(class="btn btn-default") }}
+        </form>
+    </div>
+</div>
+{% endblock %}

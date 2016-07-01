@@ -1,6 +1,6 @@
 venv/
-config/config.py
-config/production.py
+config/
+migrations/
 app/config.py
 fabfile.py
 **/__pycache__/

@@ -1,0 +1,16 @@
+.msg {
+    background:#bbb;
+    border-radius:5px;
+    font-size:8px;
+    padding:3px 5px;
+    color:#fff;
+}
+.u-infor {
+    margin:10px 10px 10px 30px;
+    width:80%;
+}
+.infor {
+    padding:8px;
+    border-radius:4px;
+    display:inline-block;
+}

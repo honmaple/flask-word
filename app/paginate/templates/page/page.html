@@ -1,0 +1,17 @@
+{% extends 'maple/base.html' %}
+{% block main %}
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        Topics
+    </div>
+    {% for topic in topics.items %}
+    <div class="panel-body" style="border-bottom:1px solid #eee">
+        {{ topic.topic }}
+    </div>
+    {% endfor %}
+    <div class="panel-footer">
+        {% from 'page/paginate.html' import paginate %}
+        {{ paginate(topics,'paginate.index')}}
+    </div>
+</div>
+{% endblock %}

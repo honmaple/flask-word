@@ -12,18 +12,27 @@ from . import site
 from flask import render_template, request, jsonify, redirect,url_for,flash
 from .form import VoteForm
 
+
+choices = ['走进荒野', '荒野求生','学好人']
 _vote = {
     'title': '请选择你最喜欢的电影:',
     'total':38,
-    'list': [('1', '走进荒野'),
-             ('2', '荒野求生')]
+    'list': [(str(x+1),y) for x,y in enumerate(choices)]
 }
+
 
 
 @site.route('')
 def index():
     form = VoteForm()
     form.vote.choices = _vote['list']
+    form.process()
+    return render_template('vote/index.html', vote=_vote, form=form)
+
+@site.route('/hello')
+def hello():
+    form = VoteForm()
+    form.vote.choices = [('1','hello'),('2','world'),('3','hello world')]
     form.process()
     return render_template('vote/index.html', vote=_vote, form=form)
 
