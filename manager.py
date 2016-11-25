@@ -1,3 +1,5 @@
+# !/usr/bin/env python
+# -*- coding=UTF-8 -*-
 # *************************************************************************
 #   Copyright © 2015 JiangLin. All rights reserved.
 #   File Name: db_create.py
@@ -5,19 +7,30 @@
 #   Mail:xiyang0807@gmail.com
 #   Created Time: 2016-02-11 13:34:38
 # *************************************************************************
-# !/usr/bin/env python
-# -*- coding=UTF-8 -*-
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
-from app import app, db
+from app import create_app
+from app.extension import db
 
+app = create_app()
 migrate = Migrate(app, db)
 manager = Manager(app)
 
 
 @manager.command
-def run():
+def runserver():
     return app.run()
+
+
+@manager.command
+def init_db():
+    """
+    Drops and re-creates the SQL schema
+    """
+    # db.drop_all()
+    db.configure_mappers()
+    db.create_all()
+    db.session.commit()
 
 
 @manager.option('-h', '--host', dest='host', default='127.0.0.1')

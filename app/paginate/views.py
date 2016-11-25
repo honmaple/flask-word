@@ -6,39 +6,17 @@
 # Author: jianglin
 # Email: xiyang0807@gmail.com
 # Created: 2016-05-26 22:44:55 (CST)
-# Last Update:星期五 2016-5-27 0:12:8 (CST)
+# Last Update:星期四 2016-11-24 15:15:3 (CST)
 #          By:
 # Description:
 # **************************************************************************
-from flask import Blueprint, render_template, abort, request
-from app import app, db
-
-site = Blueprint('paginate', __name__, template_folder='templates')
-
-
-def is_num(num):
-    if num is not None:
-        try:
-            num = int(num)
-            if num > 0:
-                return num
-            else:
-                abort(404)
-        except ValueError:
-            abort(404)
+from flask.views import MethodView
+from flask import render_template, request
+from .models import Topic
 
 
-class Topic(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    topic = db.Column(db.String(120))
-
-    def __repr__(self):
-        return '<Topic %r>' % self.id
-
-
-@site.route('')
-def index():
-    app.config['PER_PAGE'] = 3
-    page = is_num(request.args.get('page'))
-    topics = Topic.query.paginate(page, app.config['PER_PAGE'], error_out=True)
-    return render_template('page/page.html', topics=topics)
+class PageListView(MethodView):
+    def get(self):
+        page = request.args.get('page', 1, type=int)
+        topics = Topic.query.paginate(page, 3, True)
+        return render_template('page/page.html', topics=topics)

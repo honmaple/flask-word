@@ -11,55 +11,55 @@
         <link rel="stylesheet" href="{{ ASSET_URL }}" />
         {% endassets %}
         <script type=text/javascript>
-$(document).ready(function(){
-    $("#showerror").hide();
-    $('button#hide').click(function(){
-        $("#showerror").hide();
-    });
-    var csrftoken = "{{ csrf_token() }}"
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken)
-                }
-            }
-        });
-    $('button#ajax').click(function() {
-        $.ajax ({
-            type : "POST",
-            url : "{{ url_for('vote.vote') }}",
-            data:JSON.stringify({
-                vote: $('input[name="vote"]:checked').val()
-            }),
-            contentType: 'application/json;charset=UTF-8',
-            success: function(result) {
-                if (result.judge==true){
-                    window.location='{{ url_for('vote.index') }}';
-                }
-                else
-                {
-                    $("#showerror").show();
-                    $("#error").text(result.error);
-                }
-            }
-        });
-    });
-});
+         $(document).ready(function(){
+             $("#showerror").hide();
+             $('button#hide').click(function(){
+                 $("#showerror").hide();
+             });
+             var csrftoken = "{{ csrf_token() }}"
+             $.ajaxSetup({
+                 beforeSend: function(xhr, settings) {
+                     if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                         xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                     }
+                 }
+             });
+             $('button#ajax').click(function() {
+                 $.ajax ({
+                     type : "POST",
+                     url : "{{ url_for('vote.votelist') }}",
+                     data:JSON.stringify({
+                         vote: $('input[name="vote"]:checked').val()
+                     }),
+                     contentType: 'application/json;charset=UTF-8',
+                     success: function(result) {
+                         if (result.judge==true){
+                             window.location='{{ url_for('vote.votelist') }}';
+                         }
+                         else
+                             {
+                                 $("#showerror").show();
+                                 $("#error").text(result.error);
+                             }
+                     }
+                 });
+             });
+         });
         </script>
         <style type="text/css">
-            html,body{height:100%}
-            .container {width:100%;}
-            .footer {margin-top:-30px;height:30px;}
-            .wrap{min-height:100%}
-            .main{padding-bottom:30px;overflow:hidden;}
-            ul {margin:0;padding:0;}
-            li {
-                list-style:none;
-            }
-            .category {
-                padding:15px;background:#fff;
-                border: 1px solid #ddd;border-radius: 3px;
-            }
+         html,body{height:100%}
+         .container {width:100%;}
+         .footer {margin-top:-30px;height:30px;}
+         .wrap{min-height:100%}
+         .main{padding-bottom:30px;overflow:hidden;}
+         ul {margin:0;padding:0;}
+         li {
+             list-style:none;
+         }
+         .category {
+             padding:15px;background:#fff;
+             border: 1px solid #ddd;border-radius: 3px;
+         }
         </style>
     </head>
     <body>
@@ -100,7 +100,7 @@ $(document).ready(function(){
                             <section>
                                 <div style="font-size:16px"> <b>投票结果:</b></div>
                                 {% for e in vote['list'] %}
-                                    <b>{{ e[1] }}:</b>
+                                <b>{{ e[1] }}:</b>
                                 <div class="progress">
                                     {% set counts = e[1] | vote_count | int %}
                                     {% set count = counts / vote['total'] * 100 %}

@@ -6,7 +6,7 @@
 # Author: jianglin
 # Email: xiyang0807@gmail.com
 # Created: 2016-06-13 22:04:25 (CST)
-# Last Update:星期五 2016-7-1 21:1:25 (CST)
+# Last Update:星期五 2016-11-25 15:10:32 (CST)
 #          By:
 # Description:
 # **************************************************************************
@@ -14,7 +14,7 @@ from jinja2 import Template
 from flask import session
 from flask.ext.socketio import emit, join_room, leave_room
 from werkzeug.utils import escape
-from .. import socketio
+from app.extension import socketio
 
 
 def get_html(username, msg):
@@ -37,8 +37,9 @@ def get_html(username, msg):
 def joined(message):
     room = session.get('room')
     join_room(room)
-    emit('status', {'msg': session.get('username') + ' has entered the room.'},
-         room=room)
+    emit(
+        'status', {'msg': session.get('username') + ' has entered the room.'},
+        room=room)
 
 
 @socketio.on('text', namespace='/chat')
@@ -52,7 +53,7 @@ def text(message):
 
 @socketio.on('left', namespace='/chat')
 def left(message):
-    room = session.get('room')
+    room = session.pop('room', 'hello world')
+    username = session.pop('username', '1')
     leave_room(room)
-    emit('status', {'msg': session.get('username') + ' has left the room.'},
-         room=room)
+    emit('status', {'msg': username + ' has left the room.'}, room=room)

@@ -27,7 +27,7 @@ $(document).ready(function(){
     $('button#ajax').click(function() {
         $.ajax ({
             type : "POST",
-            url : "{{ url_for('word.index') }}",
+            url : "{{ url_for('word.wordlist') }}",
             data:JSON.stringify({
                 content: $('#content').val(),
                 email: $('#email').val(),
